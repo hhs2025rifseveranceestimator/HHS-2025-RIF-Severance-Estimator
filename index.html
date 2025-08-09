@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>2025 HHS RIF Severance Estimator</title>
+<style>
+	body {
+	  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	  margin: 20px auto;
+	  max-width: 900px;
+	  background-color: #f9fafb;
+	  color: #333;
+	  line-height: 1.1;
+	  padding: 20px;
+	  box-sizing: border-box;
+	  border-radius: 8px;
+	  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+	}
+
+	h1 {
+	  color: #2c3e50;
+	  font-weight: 700;
+	  font-size: 2.4rem;
+	  margin-bottom: 20px;
+	  text-align: center;
+	}
+
+	.tabs {
+	  display: flex;
+	  margin-bottom: 15px;
+	  flex-wrap: wrap;
+	  border-bottom: 3px solid #2980b9;
+	}
+
+	.tab {
+	  padding: 12px 20px;
+	  cursor: pointer;
+	  background-color: #d6e6f5;
+	  color: #2980b9;
+	  font-weight: 600;
+	  border: 1px solid #2980b9;
+	  border-bottom: none;
+	  border-radius: 8px 8px 0 0;
+	  margin-right: 8px;
+	  user-select: none;
+	  transition: background-color 0.3s ease, color 0.3s ease;
+	}
+
+	.tab:hover:not(.active) {
+	  background-color: #a9cae8;
+	}
+
+	.tab.active {
+	  background-color: #2980b9;
+	  color: #fff;
+	  border-bottom: 3px solid #f9fafb;
+	}
+
+	.tab.hidden {
+	  display: none !important;
+	}
+
+	.tab-content {
+	  display: none;
+	  background-color: #fff;
+	  padding: 25px 30px;
+	  border: 1px solid #ddd;
+	  border-radius: 0 8px 8px 8px;
+	  box-shadow: 0 2px 8px rgb(0 0 0 / 0.05);
+	}
+
+	.tab-content.active {
+	  display: block;
+	}
+
+	table {
+	  border-collapse: collapse;
+	  width: 100%;
+	  margin-top: 15px;
+	  font-size: 0.95rem;
+	}
+
+	th, td {
+	  border: 1px solid #ccc;
+	  padding: 10px 12px;
+	  text-align: right;
+	  background-color: #f7f9fc;
+	  color: #34495e;
+	}
+
+	th {
+	  background-color: #2980b9;
+	  color: #ffffff;
+	  font-weight: 700;
+	}
+
+	th:first-child, td:first-child {
+	  text-align: left;
+	}
+
+	tfoot td {
+	  font-weight: 700;
+	  background-color: #e1e8f0;
+	}
+
+	.footnote {
+	  font-size: 0.85rem;
+	  color: #7f8c8d;
+	  margin-top: 12px;
+	}
+
+	button {
+	  margin-top: 15px;
+	  padding: 10px 18px;
+	  font-weight: 600;
+	  font-size: 1rem;
+	  color: white;
+	  background-color: #2980b9;
+	  border: none;
+	  border-radius: 6px;
+	  cursor: pointer;
+	  transition: background-color 0.25s ease;
+	}
+
+	button:hover {
+	  background-color: #1a5276;
+	}
+
+	label {
+	  display: block;
+	  margin-top: 15px;
+	  font-weight: 600;
+	  color: #2c3e50;
+	}
+
+	input[type=number] {
+	  width: 180px;
+	  padding: 8px 10px;
+	  font-size: 1rem;
+	  margin-top: 6px;
+	  border: 1.5px solid #2980b9;
+	  border-radius: 5px;
+	  color: #2c3e50;
+	  transition: border-color 0.3s ease;
+	}
+
+	input[type=number]:focus {
+	  border-color: #1a5276;
+	  outline: none;
+	  box-shadow: 0 0 6px rgb(41 128 185 / 0.4);
+	}
+
+	.error {
+	  color: #c0392b;
+	  font-size: 0.9rem;
+	  margin-top: 4px;
+	}
+
+	#intro-text {
+	  white-space: pre-wrap;
+	  font-size: 1.1rem;
+	  color: #34495e;
+	  line-height: 1.5;
+	}
+
+	.pay-period-header {
+	  margin-bottom: 14px;
+	  background: #e8f1fa;
+	  border: 1px solid #2980b9;
+	  border-radius: 6px;
+	  padding: 10px 15px;
+	  color: #1a5276;
+	  font-weight: 600;
+	  display: flex;
+	  align-items: center;
+	  justify-content: space-between;
+	}
+
+	.pay-period-header button {
+	  background-color: #2980b9;
+	  padding: 6px 14px;
+	  font-weight: 600;
+	  font-size: 0.9rem;
+	  border-radius: 4px;
+	  border: none;
+	  color: white;
+	  cursor: pointer;
+	  transition: background-color 0.25s ease;
+	}
+
+	.pay-period-header button:hover {
+	  background-color: #1a5276;
+	}
+
+	#warningMessage {
+	  color: #c0392b;
+	  font-weight: 700;
+	  margin-top: 12px;
+	}
+
+	@media (max-width: 600px) {
+	  body {
+		margin: 15px;
+		padding: 15px;
+	  }
+	  .tab {
+		padding: 8px 12px;
+		font-size: 0.9rem;
+	  }
+	  button {
+		width: 100%;
+	  }
+	  input[type=number] {
+		width: 100%;
+	  }
+	}
+</style>
+</head>
+<body>
+
+<h1>2025 HHS RIF Severance Estimator</h1>
+
+<div class="tabs">
+  <div class="tab active" data-tab="intro">Introduction</div>
+  <div class="tab" data-tab="dataentry">Data Entry</div>
+  <div class="tab hidden" data-tab="payperiods">Pay Periods</div>
+  <div class="tab hidden" data-tab="dailypayout">Daily Payout</div>
+  <div class="tab hidden" data-tab="payperioddetails">Pay Period Details</div>
+</div>
+
+<div id="intro" class="tab-content active">
+  <div id="intro-text">
+Welcome to the 2025 HHS Reduction in Force (RIF) Severance Estimator tool.
+
+<strong>Disclaimer: This is for informational purposes only and is not an official HHS or OPM calculation.</strong>
+
+This tool helps former HHS Federal employees separated on July 14, 2025 to estimate severance payouts, based on input data from RIF paperwork and pay statements.
+
+You will need the following information to proceed:
+<ul style="line-height: 1;"><li>Total Severance Estimate</li>
+<li>Initial Severance Payout Information (used to calculate your daily severance rate)</li></ul>
+Please visit the <strong>Data Entry</strong> tab to enter your estimated severance amount, initial severance days paid, and initial payout amount on the Data Entry tab.
+
+The Pay Periods and Daily Payout tabs will then display your estimated severance payment schedule.
+  </div>
+</div>
+
+<div id="dataentry" class="tab-content">
+  <form id="dataForm">
+    <table><tr><td width="500"><label for="severanceAmount">Estimated Severance Amount ($, enter the number portion only with decimals):</label>
+    <input id="severanceAmount" name="severanceAmount" type="number" step="0.01" min="0" required />
+    <div id="errSeveranceAmount" class="error"></div>
+	</td><td style="text-align: left">For your <strong>estimated severance amount</strong>, you may consider using one of the following data sources:
+	<ul style="line-height: 1.1;"><li>Separation SF-50 (sent via USPS with separation package; see Remarks section)</li>
+	<li>Amended Notice of Termination (sent via UPS; see back of page)</li>
+	<li>GRB Platform (now decommissioned)</li>
+	<li>Self-calculations using the <a href="https://www.opm.gov/policy-data-oversight/pay-leave/pay-administration/fact-sheets/severance-pay-estimation-worksheet/">OPM Severance Pay Estimation Worksheet</a> (<i>as a last resort</i>)</li></ul>
+	<br /><em style="font-size: 10.5pt">Example value: 21203.20</em></td></tr></table>
+
+    <table><tr><td width="500"><label for="initialDaysPaid">Initial Severance Days Paid (typically 9):</label>
+    <input id="initialDaysPaid" name="initialDaysPaid" type="number" step="1" min="0" required />
+    <div id="errInitialDaysPaid" class="error"></div>
+	</td><td style="text-align: left">For your <strong>initial severance payout</strong>, please use your August 1 Leave and Earnings Statement (electronically available on <a href="https://mypay.dfas.mil/">DFAS myPay</a> or physically mailed via USPS).<br />
+	See the "Current Earnings" section, and enter the value for Hours/Days.<br />
+	<br /><em style="font-size: 10.5pt">Example value: 9</em></td></tr></table>
+
+    <table><tr><td width="500"><label for="initialPayoutAmount">Initial Severance Payout Amount ($):</label>
+    <input id="initialPayoutAmount" name="initialPayoutAmount" type="number" step="0.01" min="0" required />
+    <div id="errInitialPayoutAmount" class="error"></div>
+	</td><td style="text-align: left">For your <strong>initial severance payout</strong>, please use your August 1 Leave and Earnings Statement (electronically available on <a href="https://mypay.dfas.mil/">DFAS myPay</a> or physically mailed via USPS).<br />
+	See the "Current Earnings" section, and enter the value for Amount.<br />
+	<br /><em style="font-size: 10.5pt">Example value: 4671.03</em></td></tr></table>
+
+    <button type="submit">Calculate Severance Schedule</button>
+    <div id="warningMessage" role="alert" aria-live="assertive"></div>
+  </form>
+</div>
+
+<div id="payperiods" class="tab-content"></div>
+<div id="dailypayout" class="tab-content"></div>
+<div id="payperioddetails" class="tab-content"></div>
+
+<script>
+(() => {
+  const usdFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+
+  const fixedPayoutStartDate = new Date(2025, 6, 15); // July 15, 2025
+  const payoutEndDate = new Date(2026, 6, 15); // July 15, 2026 cap
+
+  const payPeriodEnds = [];
+  const payDates = [];
+  let periodEnd = new Date(2025, 6, 26); // July 26, 2025
+  let payDate = new Date(2025, 7, 1); // Aug 1, 2025
+  const lastPeriodEnd = new Date(2026, 6, 25); // July 25, 2026
+  while (periodEnd <= lastPeriodEnd) {
+    payPeriodEnds.push(new Date(periodEnd));
+    payDates.push(new Date(payDate));
+    periodEnd.setDate(periodEnd.getDate() + 14);
+    payDate.setDate(payDate.getDate() + 14);
+  }
+
+  // Tab switching
+  const tabs = document.querySelectorAll(".tab");
+  const tabContents = document.querySelectorAll(".tab-content");
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      tabs.forEach(t => t.classList.remove("active"));
+      tabContents.forEach(c => c.classList.remove("active"));
+      tab.classList.add("active");
+      document.getElementById(tab.dataset.tab).classList.add("active");
+    });
+  });
+
+  function validateInputs(sevAmt, initDays, initPayout) {
+    let valid = true;
+    document.getElementById("errSeveranceAmount").textContent = "";
+    document.getElementById("errInitialDaysPaid").textContent = "";
+    document.getElementById("errInitialPayoutAmount").textContent = "";
+
+    if (sevAmt === "" || isNaN(sevAmt) || Number(sevAmt) < 0) {
+      document.getElementById("errSeveranceAmount").textContent = "Enter a non-negative severance amount.";
+      valid = false;
+    }
+    if (initDays === "" || isNaN(initDays) || !Number.isInteger(Number(initDays)) || Number(initDays) < 0) {
+      document.getElementById("errInitialDaysPaid").textContent = "Enter a non-negative integer for initial days paid.";
+      valid = false;
+    }
+    if (initPayout === "" || isNaN(initPayout) || Number(initPayout) < 0) {
+      document.getElementById("errInitialPayoutAmount").textContent = "Enter a non-negative amount for initial payout.";
+      valid = false;
+    }
+    if (valid && Number(initDays) === 0 && Number(initPayout) !== 0) {
+      document.getElementById("errInitialPayoutAmount").textContent = "Initial payout must be zero if initial days paid is zero.";
+      valid = false;
+    }
+    return valid;
+  }
+
+  function formatDate(date) {
+    return (date.getMonth()+1) + "/" + date.getDate() + "/" + date.getFullYear();
+  }
+
+  function createTable(headers, rows) {
+    let html = "<table><thead><tr>";
+    for (const h of headers) html += `<th>${h}</th>`;
+    html += "</tr></thead><tbody>";
+    for (const row of rows) {
+      html += "<tr>";
+      for (const cell of row) {
+        html += `<td>${cell}</td>`;
+      }
+      html += "</tr>";
+    }
+    html += "</tbody></table><br />";
+    return html;
+  }
+
+  function exportCSV(filename, headers, rows) {
+    let csvContent = headers.join(",") + "\n";
+    for (const row of rows) {
+      csvContent += row.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",") + "\n";
+    }
+    const blob = new Blob([csvContent], {type: "text/csv;charset=utf-8;"});
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+  }
+
+  function addExportButton(containerId, filename, headers, rows) {
+    const container = document.getElementById(containerId);
+    const oldBtn = container.querySelector("button");
+    if (oldBtn) oldBtn.remove();
+
+    const btn = document.createElement("button");
+    btn.textContent = "Export CSV";
+    btn.onclick = () => exportCSV(filename, headers, rows);
+    container.appendChild(btn);
+  }
+
+  function renderPayPeriodDetailsTab(payPeriods, dailyEntries) {
+    const container = document.getElementById("payperioddetails");
+    container.innerHTML = "";
+
+    payPeriods.forEach((period, idx) => {
+      const periodStartDate = new Date(period.periodEnd);
+      periodStartDate.setDate(periodStartDate.getDate() - 13);
+
+      const headerDiv = document.createElement("div");
+      headerDiv.className = "pay-period-header";
+
+      let headerHTML = `<i>Pay Date: ${period.payDate}</i> | Pay Period Ending: ${period.periodEnd} | Estimated Severance Pay: ${usdFormatter.format(period.amount)}`;
+
+      if (period.amount > 0) {
+        headerHTML += ` <button aria-expanded="false" aria-controls="details-${idx}">Show Details</button>`;
+      }
+
+      headerDiv.innerHTML = headerHTML;
+
+      const detailsDiv = document.createElement("div");
+      detailsDiv.id = `details-${idx}`;
+      detailsDiv.style.display = "none";
+      detailsDiv.style.marginTop = "6px";
+
+      const dailyForPeriod = dailyEntries.filter(e => e.date >= periodStartDate && e.date <= new Date(period.periodEnd));
+
+      const dpHeaders = ["Date", "Severance Amount", "Cumulative Severance", "Notes"];
+      const dpRows = dailyForPeriod.map(e => [e.displayDate, usdFormatter.format(e.amount), usdFormatter.format(e.cumulative), e.note]);
+      detailsDiv.innerHTML = createTable(dpHeaders, dpRows);
+
+      if (period.amount > 0) {
+        const btn = headerDiv.querySelector("button");
+        btn.addEventListener("click", () => {
+          const expanded = btn.getAttribute("aria-expanded") === "true";
+          btn.setAttribute("aria-expanded", !expanded);
+          detailsDiv.style.display = expanded ? "none" : "block";
+          btn.textContent = expanded ? "Show Details" : "Hide Details";
+        });
+      }
+
+      container.appendChild(headerDiv);
+      container.appendChild(detailsDiv);
+    });
+  }
+
+  function calculateAndRender(sevAmt, initDays, initPayout) {
+    // Show tabs for results
+    ["payperiods", "dailypayout", "payperioddetails"].forEach(tabName => {
+      document.querySelector(`.tab[data-tab="${tabName}"]`).classList.remove("hidden");
+    });
+
+    const perDay = +(initDays > 0 ? (initPayout / initDays) : 0);
+    if (perDay === 0) {
+      alert("Initial severance days paid must be greater than zero.");
+      return;
+    }
+    const totalDays = +(sevAmt / perDay).toFixed(2);
+    const totalWeeks = +(totalDays / 5).toFixed(2);
+
+    const dailyEntries = [];
+    let date = new Date(fixedPayoutStartDate);
+
+    const wholeDays = Math.floor(totalDays);
+    const fractionalDay = +(totalDays - wholeDays).toFixed(6);
+    const totalDaysCount = fractionalDay > 0 ? wholeDays + 1 : wholeDays;
+
+    const exactDailyPayments = [];
+    for (let i = 0; i < wholeDays; i++) {
+      exactDailyPayments.push(perDay);
+    }
+    if (fractionalDay > 0) {
+      exactDailyPayments.push(perDay * fractionalDay);
+    }
+
+    let i = 0;
+    let cumulative = 0;
+
+    while (i < totalDaysCount && date <= payoutEndDate) {
+      const dayOfWeek = date.getDay();
+      if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+        const isInitial = i < initDays;
+        let payForDay;
+        if (i === totalDaysCount - 1) {
+          const sumPrevious = dailyEntries.reduce((acc, e) => acc + e.amount, 0);
+          payForDay = +(sevAmt - sumPrevious).toFixed(2);
+        } else {
+          payForDay = +exactDailyPayments[i].toFixed(2);
+        }
+        cumulative = +(cumulative + payForDay).toFixed(2);
+
+        dailyEntries.push({
+          date: new Date(date),
+          displayDate: formatDate(date) + (isInitial ? " *" : ""),
+          amount: payForDay,
+          cumulative,
+          note: isInitial ? "Initial payout" : ""
+        });
+        i++;
+      }
+      date.setDate(date.getDate() + 1);
+    }
+
+    const payPeriods = payPeriodEnds.map((periodEndDate, idx) => {
+      const periodStartDate = new Date(periodEndDate);
+      periodStartDate.setDate(periodStartDate.getDate() - 13);
+      const amount = dailyEntries.reduce((sum, e) => {
+        return (e.date >= periodStartDate && e.date <= periodEndDate && e.date <= payoutEndDate) ? sum + e.amount : sum;
+      }, 0);
+      return {
+        periodEnd: formatDate(periodEndDate),
+        payDate: formatDate(payDates[idx]),
+        amount: +amount.toFixed(2)
+      };
+    });
+
+    const warningDiv = document.getElementById("warningMessage");
+    // Clear warning if any
+    warningDiv.textContent = "";
+
+    const summaryHeaders = ["Metric", "Value"];
+    const summaryRows = [
+      ["Total Severance", usdFormatter.format(sevAmt)],
+      ["Daily Severance Rate", usdFormatter.format(perDay)],
+      ["Estimated Total Severance Days", totalDays.toFixed(2)],
+      ["Estimated Total Severance Weeks", totalWeeks.toFixed(2)]
+    ];
+    const payperiodsContainer = document.getElementById("payperiods");
+    payperiodsContainer.innerHTML = `
+      <h2>Summary</h2>
+      ${createTable(summaryHeaders, summaryRows)}
+      <h2>Pay Periods</h2>
+      ${createTable(
+        ["Pay Period End", "Pay Date", "Estimated Severance Pay"],
+        payPeriods.map(p => [p.periodEnd, p.payDate, usdFormatter.format(p.amount)])
+      )}
+    `;
+    addExportButton("payperiods", "pay_periods.csv", ["Pay Period End", "Pay Date", "Estimated Severance Pay"], payPeriods.map(p => [p.periodEnd, p.payDate, usdFormatter.format(p.amount)]));
+
+    const dpHeaders = ["Date", "Severance Amount", "Cumulative Severance", "Notes"];
+    const dpRows = dailyEntries.map(e => [e.displayDate, usdFormatter.format(e.amount), usdFormatter.format(e.cumulative), e.note]);
+    const dailypayoutContainer = document.getElementById("dailypayout");
+    dailypayoutContainer.innerHTML = createTable(dpHeaders, dpRows) + '<div class="footnote">* Dates marked with * are part of the initial severance payout on 8/1/2025.</div>';
+    addExportButton("dailypayout", "daily_payout.csv", dpHeaders, dpRows);
+
+    renderPayPeriodDetailsTab(payPeriods, dailyEntries);
+
+    // Show Pay Periods tab on calculation
+    tabs.forEach(t => t.classList.remove("active"));
+    tabContents.forEach(c => c.classList.remove("active"));
+    document.querySelector("[data-tab='payperiods']").classList.add("active");
+    document.getElementById("payperiods").classList.add("active");
+  }
+
+  // Initially hide tabs except intro and data entry
+  ["payperiods", "dailypayout", "payperioddetails"].forEach(tabName => {
+    document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add("hidden");
+    document.getElementById(tabName).classList.remove("active");
+  });
+
+  // Form submit handler
+  document.getElementById("dataForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const sevAmt = parseFloat(document.getElementById("severanceAmount").value);
+    const initDays = parseInt(document.getElementById("initialDaysPaid").value, 10);
+    const initPayout = parseFloat(document.getElementById("initialPayoutAmount").value);
+
+    const warningDiv = document.getElementById("warningMessage");
+    warningDiv.textContent = "";
+
+    if (!validateInputs(sevAmt, initDays, initPayout)) return;
+
+    if (sevAmt === 0 || initDays === 0 || initPayout === 0) {
+      warningDiv.textContent = "Warning: One or more input values are zero. You might not be eligible for severance.";
+    }
+
+    calculateAndRender(sevAmt, initDays, initPayout);
+  });
+})();
+</script>
+
+</body>
+</html>
