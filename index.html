@@ -234,7 +234,7 @@ Welcome to the 2025 HHS Reduction in Force (RIF) Severance Estimator tool.
 
 <strong>Disclaimer: This is for informational purposes only and is not an official HHS or OPM calculation.</strong>
 
-This tool helps former HHS Federal employees separated on July 14, 2025 to estimate severance payouts, based on input data from RIF paperwork and pay statements.
+This tool helps former HHS Federal employees separated on July 14, 2025 to estimate timing and amounts of severance payouts, based on initial data from RIF paperwork and pay statements.
 
 You will need the following information to proceed:
 <ul style="line-height: 1;"><li>Total Severance Estimate</li>
@@ -254,21 +254,22 @@ The Pay Periods and Daily Payout tabs will then display your estimated severance
 	<ul style="line-height: 1.1;"><li>Separation SF-50 (sent via USPS with separation package; see Remarks section)</li>
 	<li>Amended Notice of Termination (sent via UPS; see back of page)</li>
 	<li>GRB Platform (now decommissioned)</li>
-	<li>Self-calculations using the <a href="https://www.opm.gov/policy-data-oversight/pay-leave/pay-administration/fact-sheets/severance-pay-estimation-worksheet/">OPM Severance Pay Estimation Worksheet</a> (<i>as a last resort</i>)</li></ul>
+	<li>Self-calculations using the <a href="https://www.opm.gov/policy-data-oversight/pay-leave/pay-administration/fact-sheets/severance-pay-estimation-worksheet/">OPM Severance Pay Estimation Worksheet</a></li>
+	<li>Unofficial calculation using mrbreck's <a href="https://mrbreck.github.io/FedSeveranceCalculator/">Federal Severance Calculator</a> (click "Show Details" and then copy the value for "Total Severance Fund")</li></ul>
 	<br /><em style="font-size: 10.5pt">Example value: 21203.20</em></td></tr></table>
 
     <table><tr><td width="500"><label for="initialDaysPaid">Initial Severance Days Paid (typically 9):</label>
     <input id="initialDaysPaid" name="initialDaysPaid" type="number" step="1" min="0" required />
     <div id="errInitialDaysPaid" class="error"></div>
 	</td><td style="text-align: left">For your <strong>initial severance payout</strong>, please use your August 1 Leave and Earnings Statement (electronically available on <a href="https://mypay.dfas.mil/">DFAS myPay</a> or physically mailed via USPS).<br />
-	See the "Current Earnings" section, and enter the value for Hours/Days.<br />
+	<br />In the LES "Current Earnings" section, find the entry labeled "SEVERANCE PD" and enter here the value for Hours/Days.<br />
 	<br /><em style="font-size: 10.5pt">Example value: 9</em></td></tr></table>
 
     <table><tr><td width="500"><label for="initialPayoutAmount">Initial Severance Payout Amount ($):</label>
     <input id="initialPayoutAmount" name="initialPayoutAmount" type="number" step="0.01" min="0" required />
     <div id="errInitialPayoutAmount" class="error"></div>
 	</td><td style="text-align: left">For your <strong>initial severance payout</strong>, please use your August 1 Leave and Earnings Statement (electronically available on <a href="https://mypay.dfas.mil/">DFAS myPay</a> or physically mailed via USPS).<br />
-	See the "Current Earnings" section, and enter the value for Amount.<br />
+	<br />In the LES "Current Earnings" section, find the entry labeled "SEVERANCE PD" and enter here the value for Amount.<br />
 	<br /><em style="font-size: 10.5pt">Example value: 4671.03</em></td></tr></table>
 
     <button type="submit">Calculate Severance Schedule</button>
