@@ -223,9 +223,9 @@
 <div class="tabs">
   <div class="tab active" data-tab="intro">Introduction</div>
   <div class="tab" data-tab="dataentry">Data Entry</div>
-  <div class="tab hidden" data-tab="payperiods">Pay Periods</div>
-  <div class="tab hidden" data-tab="dailypayout">Daily Payout</div>
-  <div class="tab hidden" data-tab="payperioddetails">Pay Period Details</div>
+  <div class="tab hidden" data-tab="payperiods">Summary</div>
+  <div class="tab hidden" data-tab="dailypayout">Details by Day</div>
+  <div class="tab hidden" data-tab="payperioddetails">Details by Pay Period</div>
 </div>
 
 <div id="intro" class="tab-content active">
@@ -241,7 +241,7 @@ You will need the following information to proceed:
 <li>Initial Severance Payout Information (used to calculate your daily severance rate)</li></ul>
 Please visit the <strong>Data Entry</strong> tab to enter your estimated severance amount, initial severance days paid, and initial payout amount on the Data Entry tab.
 
-The Pay Periods and Daily Payout tabs will then display your estimated severance payment schedule.
+The Summary and Details tabs will then display your estimated severance payment schedule.
   </div>
 </div>
 
@@ -255,7 +255,7 @@ The Pay Periods and Daily Payout tabs will then display your estimated severance
 	<li>Amended Notice of Termination (sent via UPS; see back of page)</li>
 	<li>GRB Platform (now decommissioned)</li>
 	<li>Self-calculations using the <a href="https://www.opm.gov/policy-data-oversight/pay-leave/pay-administration/fact-sheets/severance-pay-estimation-worksheet/">OPM Severance Pay Estimation Worksheet</a></li>
-	<li>Unofficial calculation using mrbreck's <a href="https://mrbreck.github.io/FedSeveranceCalculator/">Federal Severance Calculator</a> (click "Show Details" and then copy the value for "Total Severance Fund")</li></ul>
+	<li>Unofficial calculation using mrbreck's <a href="https://mrbreck.github.io/FedSeveranceCalculator/" target="_blank">Federal Severance Calculator</a> (click "Show Details" and then copy the value for "Total Severance Fund")</li></ul>
 	<br /><em style="font-size: 10.5pt">Example value: 21203.20</em></td></tr></table>
 
     <table><tr><td width="500"><label for="initialDaysPaid">Initial Severance Days Paid (typically 9):</label>
@@ -515,13 +515,13 @@ The Pay Periods and Daily Payout tabs will then display your estimated severance
         payPeriods.map(p => [p.periodEnd, p.payDate, usdFormatter.format(p.amount)])
       )}
     `;
-    addExportButton("payperiods", "pay_periods.csv", ["Pay Period End", "Pay Date", "Estimated Severance Pay"], payPeriods.map(p => [p.periodEnd, p.payDate, usdFormatter.format(p.amount)]));
+    addExportButton("payperiods", "summary_by_payperiod.csv", ["Pay Period End", "Pay Date", "Estimated Severance Pay"], payPeriods.map(p => [p.periodEnd, p.payDate, usdFormatter.format(p.amount)]));
 
     const dpHeaders = ["Date", "Severance Amount", "Cumulative Severance", "Notes"];
     const dpRows = dailyEntries.map(e => [e.displayDate, usdFormatter.format(e.amount), usdFormatter.format(e.cumulative), e.note]);
     const dailypayoutContainer = document.getElementById("dailypayout");
     dailypayoutContainer.innerHTML = createTable(dpHeaders, dpRows) + '<div class="footnote">* Dates marked with * are part of the initial severance payout on 8/1/2025.</div>';
-    addExportButton("dailypayout", "daily_payout.csv", dpHeaders, dpRows);
+    addExportButton("dailypayout", "summary_by_day.csv", dpHeaders, dpRows);
 
     renderPayPeriodDetailsTab(payPeriods, dailyEntries);
 
